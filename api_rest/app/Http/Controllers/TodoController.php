@@ -63,13 +63,15 @@ class TodoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (todo::where("id", $id)->exist()) {
-            $todos = todo::where("id", $id);
-            $todos->nom = is_null ? $todos->nom : $request->nom;
-            $todos->description = is_null ? $todos->description : $request->description;
-            $todos->status = is_null ? $todos->status : $request->status;
+        $todos = todo::FindOrFail($id);
+        // $todos->nom = is_null($request->nom) ? $todos->nom : $request->nom;
+        // $todos->description = is_null($request->description) ? $todos->description : $request->description;
+        // $todos->status = is_null($request->status) ? $todos->status : $request->status;
 
-            $todos->save();
+        if ($todos->update($request->all())) {
+            return response()->json([
+                "Produit modifié avec succés!",
+            ]);
         }
     }
 
